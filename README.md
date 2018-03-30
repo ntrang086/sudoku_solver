@@ -10,13 +10,18 @@
 
 ## Synopsis
 
-This project applies an AI concept called [Constraint Propagation](https://en.wikipedia.org/wiki/Constraint_satisfaction) to solve _diagonal_ Sudoku puzzles. See the final section in this README document **Sudoku explained** for an overview of Sudoku, diagonal Sudoku and relevant terminologies.
+This project applies two AI concepts, [Constraint Propagation](https://en.wikipedia.org/wiki/Constraint_satisfaction) and [Depth-first Search](https://en.wikipedia.org/wiki/Depth-first_search), to solve _diagonal_ Sudoku puzzles. See the final section in this README document **Sudoku explained** for an overview of Sudoku, diagonal Sudoku and relevant terminologies.
 
-### Key AI concept: Constraint propagation
-Below is an explanation of how constraint propagation is applied to solve the naked twins problem and the diagonal Sudoku problem (see `solution.py` for the implementation and **Sudoku explained** for an overview):
+## Key AI concepts: 
 
-* The naked twins problem: Each box must have a different value from the rest of the boxes in the same unit. So if two boxes have naked twins as possibilities, we can remove these possibilities from the rest of the boxes in the same unit. As we do so, we recompute the possible value sets across the unit. When we apply Naked Twins strategy, together with Eliminate and Only Choice, repeatedly, we will likely reach a solution to the Sudoku.
-* The diagonal Sudoku problem: When we add diagonal units to both the unit and peer dictionaries, all the functions such as `naked_twins`, `eliminate` and `only_choice` will take into account this new constraint. As we apply these functions repeatedly, this constraint ensures the resulting board will have a unique value for each box on each diagonal.
+### Constraint propagation
+Below is an explanation of how constraint propagation is applied to solve the naked twins problem and the diagonal Sudoku problem (see `solution.py` for the implementation):
+
+* The naked twins problem: Each box must have a different value from the rest of the boxes in the same unit. So if two boxes have naked twins as possibilities, we can remove these possibilities from the rest of the boxes in the same unit. As we do so, we recompute the possible value sets across the unit. When we apply Naked Twins strategy, together with Eliminate and Only Choice, repeatedly, we will likely reach a solution to the Sudoku. (see `naked_twins` in `solution.py`)
+* The diagonal Sudoku problem: When we add diagonal units to both the unit and peer dictionaries, all the functions such as `naked_twins`, `eliminate` and `only_choice` (`solution.py`) will take into account this new constraint. As we apply these functions repeatedly, this constraint ensures the resulting board will have a unique value for each box on each diagonal.
+
+### Search
+In the process of problem solving, we may get to the point where two or more possibilities are available. We pick a box with a minimal number of possible values and try to solve each of the puzzles obtained by choosing each of these values, recursively.
 
 ## Code
 
@@ -46,6 +51,7 @@ To run any script file, use:
 ## Sudoku explained
 
 Sudoku consists of a 9x9 grid, and the objective is to fill the grid with digits in such a way that each row, each column, and each of the 9 principal 3x3 subsquares contains all of the digits from 1 to 9. The detailed rules can be found, for example, [here](http://www.conceptispuzzles.com/?uri=puzzle/sudoku/rules).
+
 Basic rules:
 
 * If a box has a value, then all the boxes in the same row, same column, or same 3x3 square cannot have that same value.
@@ -83,4 +89,4 @@ Let's see an example. In the grids below, the set of highlighted boxes represent
 
 ![peers][image4]
 
-Source: udacity[https://www.udacity.com/]
+Source: [udacity](https://www.udacity.com/)
