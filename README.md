@@ -1,44 +1,86 @@
-# Artificial Intelligence Nanodegree
-## Introductory Project: Diagonal Sudoku Solver
+[//]: # (Image References)
 
-# Question 1 (Naked Twins)
-Q: How do we use constraint propagation to solve the naked twins problem?  
-A: Each box must have a different value from the rest of the boxes in the same unit. So if two boxes have naked twins as possibilities, we can remove these possibilities from the rest of the boxes in the same unit. As we do so, we recompute the possible value sets across the unit. When we apply Naked Twins strategy, together with Eliminate and Only Choice, repeatedly, we will likely reach a solution to the sudoku.
+[image1]: ./images/board.png "Sudoku board"
+[image2]: ./images/diagonal.png "Diagonal Sudoku"
+[image3]: ./images/labels.png "labels"
+[image4]: ./images/peers.png "peers"
 
-# Question 2 (Diagonal Sudoku)
-Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: When we add diagonal units to both the unit and peer dictionaries, all the functions such as naked_twins, eliminate and only_choice will take into account this new constraint. As we apply these functions repeatedly, this constraint ensures the resulting board will have a unique value for each box on each diagonal.
 
-### Install
+# Solve Sudoku with Artificial Intelligence
 
-This project requires **Python 3**.
+## Synopsis
 
-We recommend students install [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project. 
-Please try using the environment we provided in the Anaconda lesson of the Nanodegree.
+This project applies an AI concept called [Constraint Propagation](https://en.wikipedia.org/wiki/Constraint_satisfaction) to solve _diagonal_ Sudoku puzzles. See the final section in this README document **Sudoku explained** for an overview of Sudoku, diagonal Sudoku and relevant terminologies.
 
-##### Optional: Pygame
+### Key AI concept: Constraint propagation
+Below is an explanation of how constraint propagation is applied to solve the naked twins problem and the diagonal Sudoku problem (see `solution.py` for the implementation and **Sudoku explained** for an overview):
 
-Optionally, you can also install pygame if you want to see your visualization. If you've followed our instructions for setting up our conda environment, you should be all set.
+* The naked twins problem: Each box must have a different value from the rest of the boxes in the same unit. So if two boxes have naked twins as possibilities, we can remove these possibilities from the rest of the boxes in the same unit. As we do so, we recompute the possible value sets across the unit. When we apply Naked Twins strategy, together with Eliminate and Only Choice, repeatedly, we will likely reach a solution to the Sudoku.
+* The diagonal Sudoku problem: When we add diagonal units to both the unit and peer dictionaries, all the functions such as `naked_twins`, `eliminate` and `only_choice` will take into account this new constraint. As we apply these functions repeatedly, this constraint ensures the resulting board will have a unique value for each box on each diagonal.
 
-If not, please see how to download pygame [here](http://www.pygame.org/download.shtml).
+## Code
 
-### Code
+* `solution.py` - Solves a diagonal Sudoku puzzle and visualizes the solution.
+* `solution_test.py` - Tests `solution.py`.
+* `PySudoku.py` and `visualize.py`- Helper files for visualizing the solution. They are not to be run separately, but will be called when running `solution.py`.
 
-* `solution.py` - You'll fill this in as part of your solution.
-* `solution_test.py` - Do not modify this. You can test your solution by running `python solution_test.py`.
-* `PySudoku.py` - Do not modify this. This is code for visualizing your solution.
-* `visualize.py` - Do not modify this. This is code for visualizing your solution.
+## Setup
 
-### Visualizing
+You need the following:
 
-To visualize your solution, please only assign values to the values_dict using the ```assign_values``` function provided in solution.py
+* Python 3
+* [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project. 
+* The AIND environment provided in the Anaconda lesson of Udacity's AIND Nanodegree (also available in this repo `aind-universal.yml`)
+* **pygame** is needed to see the visualization. It is available in the AIND environment or installed separately from [here](http://www.pygame.org/download.shtml).
 
-### Submission
-Before submitting your solution to a reviewer, you are required to submit your project to Udacity's Project Assistant, which will provide some initial feedback.  
+## Run
 
-The setup is simple.  If you have not installed the client tool already, then you may do so with the command `pip install udacity-pa`.  
+To activate an Anaconda environment (OS X or Unix/Linux), use:
+    
+`source activate <environment_name>`
 
-To submit your code to the project assistant, run `udacity submit` from within the top-level directory of this project.  You will be prompted for a username and password.  If you login using google or facebook, visit [this link](https://project-assistant.udacity.com/auth_tokens/jwt_login for alternate login instructions.
+To run any script file, use:
 
-This process will create a zipfile in your top-level directory named sudoku-<id>.zip.  This is the file that you should submit to the Udacity reviews system.
+`python <script.py>`
 
+## Sudoku explained
+
+Sudoku consists of a 9x9 grid, and the objective is to fill the grid with digits in such a way that each row, each column, and each of the 9 principal 3x3 subsquares contains all of the digits from 1 to 9. The detailed rules can be found, for example, [here](http://www.conceptispuzzles.com/?uri=puzzle/sudoku/rules).
+Basic rules:
+
+* If a box has a value, then all the boxes in the same row, same column, or same 3x3 square cannot have that same value.
+* If there is only one allowed value for a given box in a row, column, or 3x3 square, then the box is assigned that value.
+
+![Sudoku board][image1]
+
+### Diagonal Sudoku
+
+A diagonal Sudoku puzzle is identical to traditional Sudoku puzzles with the added constraint that the boxes on the two main diagonals of the board must also contain the digits 1-9 in each cell (just like the rows, columns, and 3x3 blocks)
+
+![Diagonal Sudoku][image2]
+
+### Naked twins
+
+See [this link](http://www.sudokudragon.com/tutorialnakedtwins.htm) for an explanation.
+
+### Naming conventions
+
+**Rows and columns**
+
+* The rows will be labelled by the letters A, B, C, D, E, F, G, H, I.
+* The columns will be labelled by the numbers 1, 2, 3, 4, 5, 6, 7, 8, 9. In the below diagram we can see the unsolved and solved puzzles with the labels for the rows and columns.
+* The 3x3 squares won't be labelled, but in the diagram, they can be seen with alternating colors of grey and white.
+
+![labels][image3]
+
+**Boxes, units and peers**
+
+* The individual squares at the intersection of rows and columns will be called _boxes_. These boxes will have labels 'A1', 'A2', ..., 'I9'.
+* The complete rows, columns, and 3x3 squares, will be called _units_. Thus, each unit is a set of 9 boxes, and there are 27 units in total.
+* For a particular box (such as 'A1'), its _peers_ will be all other boxes that belong to a common unit (namely, those that belong to the same row, column, or 3x3 square).
+
+Let's see an example. In the grids below, the set of highlighted boxes represent _units_. Each grid shows a different _peer_ of the box at E3.
+
+![peers][image4]
+
+Source: udacity[https://www.udacity.com/]
